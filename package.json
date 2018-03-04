@@ -2,7 +2,7 @@
   "name": "transmit-update-loader",
   "version": "0.1.0",
   "description": "Message passing tool to transmit update to another file during webpack loader process.",
-  "main": "index.js",
+  "main": "src/loader.js",
   "repository": "https://github.com/occar421/transmit-update-loader",
   "author": "MasuqaT <occar@hotmail.co.jp>",
   "license": "MIT",

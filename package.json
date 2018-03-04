@@ -17,7 +17,8 @@
   },
   "dependencies": {
     "loader-utils": "^1.1.0",
-    "schema-utils": "^0.4.5"
+    "schema-utils": "^0.4.5",
+    "touch": "^3.1.0"
   },
   "scripts": {
     "test": "jest"

@@ -36,6 +36,8 @@ export const existsAsync = fileName =>
 export const removeGeneratedFiles = async () => {
   const files = await enumerateFilesAsync(path.join(__dirname, "fixtures"));
   files.filter(f => f.endsWith(".null")).forEach(f => {
-    fs.unlinkSync(f);
+    fs.unlink(f, err => {
+      if (err && err.code !== "ENOENT") throw err;
+    });
   });
 };

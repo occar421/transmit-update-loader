@@ -3,7 +3,7 @@ import { removeGeneratedFiles, readFileAsync, fileStatAsync } from "./helpers";
 
 afterEach(removeGeneratedFiles);
 
-test("does not affect file content", async () => {
+it("should not affect file content", async () => {
   const targetFileName = "./fixtures/foo.txt";
   const status = await compiler(targetFileName, {
     transmitRules: [{ test: /\/(.*$)/, targets: ["$1.null"] }]
@@ -12,7 +12,7 @@ test("does not affect file content", async () => {
   expect(output).toBe(await readFileAsync(targetFileName));
 });
 
-test("does not renew itself", async () => {
+it("should not renew itself by default", async () => {
   // to prevent infinite renewing
   const targetFileName = "./fixtures/foo.txt";
   const preStat = await fileStatAsync(targetFileName);
@@ -23,7 +23,7 @@ test("does not renew itself", async () => {
   expect(postStat.ctimeMs).toBe(preStat.ctimeMs);
 });
 
-test("does not renew itself within multi targets", async () => {
+it("should not renew itself within multi targets", async () => {
   // to prevent infinite renewing
   const targetFileName = "./fixtures/foo.txt";
   const preStat = await fileStatAsync(targetFileName);
@@ -34,7 +34,7 @@ test("does not renew itself within multi targets", async () => {
   expect(postStat.ctimeMs).toBe(preStat.ctimeMs);
 });
 
-test("does not renew itself within multi rules", async () => {
+it("should not renew itself within multi rules", async () => {
   // to prevent infinite renewing
   const targetFileName = "./fixtures/foo.txt";
   const preStat = await fileStatAsync(targetFileName);
@@ -48,7 +48,7 @@ test("does not renew itself within multi rules", async () => {
   expect(postStat.ctimeMs).toBe(preStat.ctimeMs);
 });
 
-test("renews foo.md from foo.txt", async () => {
+it("should renew foo.md from foo.txt", async () => {
   const sourceFileName = "./fixtures/foo.txt";
   const targetFileName = "./fixtures/foo.md";
   const preStat = await fileStatAsync(targetFileName);
@@ -59,7 +59,7 @@ test("renews foo.md from foo.txt", async () => {
   expect(postStat.ctimeMs).toBeGreaterThan(preStat.ctimeMs);
 });
 
-test("renews foo.md and foo.asciidoc from foo.txt", async () => {
+it("should renew foo.md and foo.asciidoc from foo.txt", async () => {
   const sourceFileName = "./fixtures/foo.txt";
   const targetMdFileName = "./fixtures/foo.md";
   const targetAdFileName = "./fixtures/foo.asciidoc";
@@ -74,7 +74,7 @@ test("renews foo.md and foo.asciidoc from foo.txt", async () => {
   expect(postStatAd.ctimeMs).toBeGreaterThan(preStatAd.ctimeMs);
 });
 
-test("renews foo.md and foo.asciidoc and foo.rst from foo.txt", async () => {
+it("should renew foo.md and foo.asciidoc and foo.rst from foo.txt", async () => {
   const sourceFileName = "./fixtures/foo.txt";
   const targetMdFileName = "./fixtures/foo.md";
   const targetAdFileName = "./fixtures/foo.asciidoc";
@@ -93,7 +93,7 @@ test("renews foo.md and foo.asciidoc and foo.rst from foo.txt", async () => {
   expect(postStatRst.ctimeMs).toBeGreaterThan(preStatRst.ctimeMs);
 });
 
-test("renews foo.md from foo.txt and bar.txt from foo.txt", async () => {
+it("should renew foo.md from foo.txt and bar.txt from foo.txt", async () => {
   const sourceFileName = "./fixtures/foo.txt";
   const targetFooFileName = "./fixtures/foo.md";
   const targetBarFileName = "./fixtures/bar.txt";
@@ -112,9 +112,9 @@ test("renews foo.md from foo.txt and bar.txt from foo.txt", async () => {
 });
 
 // TODO
-// test('does not create a new file by default', async () => {
+// it('should not create a new file by default', async () => {
 //
 // });
-// test('creates a new file if option is set', async () => {
+// it('should create a new file if option is set', async () => {
 //
 // });

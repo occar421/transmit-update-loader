@@ -3,7 +3,7 @@ import { removeGeneratedFiles } from "./helpers";
 
 afterEach(removeGeneratedFiles);
 
-test("rejects empty option", async () => {
+it("should reject empty option", async () => {
   const targetFileName = "./fixtures/foo.txt";
   const status = await compiler(targetFileName, {});
   expect(status.compilation.errors.length).toBe(1);
@@ -12,7 +12,7 @@ test("rejects empty option", async () => {
   expect(error.error.name).toBe("ValidationError");
 });
 
-test("rejects null `transmitRules` option", async () => {
+it("should reject null `transmitRules` option", async () => {
   const targetFileName = "./fixtures/foo.txt";
   const status = await compiler(targetFileName, { transmitRules: null });
   expect(status.compilation.errors.length).toBe(1);
@@ -21,7 +21,7 @@ test("rejects null `transmitRules` option", async () => {
   expect(error.error.name).toBe("ValidationError");
 });
 
-test("rejects object `transmitRules` option", async () => {
+it("should reject object `transmitRules` option", async () => {
   const targetFileName = "./fixtures/foo.txt";
   const status = await compiler(targetFileName, {
     transmitRules: { test: /(\.$)/, targets: ["$1.null"] }
@@ -32,7 +32,7 @@ test("rejects object `transmitRules` option", async () => {
   expect(error.error.name).toBe("ValidationError");
 });
 
-test("rejects string `transmitRules.test` option", async () => {
+it("should reject string `transmitRules.test` option", async () => {
   const targetFileName = "./fixtures/foo.txt";
   // eslint-disable-next-line no-useless-escape
   const status = await compiler(targetFileName, {
@@ -44,7 +44,7 @@ test("rejects string `transmitRules.test` option", async () => {
   expect(error.error.name).toBe("ValidationError");
 });
 
-test("rejects non RegExp `transmitRules.test` option", async () => {
+it("should reject non RegExp `transmitRules.test` option", async () => {
   const targetFileName = "./fixtures/foo.txt";
   const status = await compiler(targetFileName, {
     transmitRules: [{ test: {}, targets: ["$1.null"] }]
@@ -55,7 +55,7 @@ test("rejects non RegExp `transmitRules.test` option", async () => {
   expect(error.error.message).toMatch(/transmitRules\.test/);
 });
 
-test("accepts RegExp `transmitRules.test` option", async () => {
+it("should accept RegExp `transmitRules.test` option", async () => {
   const targetFileName = "./fixtures/foo.txt";
   const status = await compiler(targetFileName, {
     transmitRules: [{ test: /(\.$)/, targets: ["$1.null"] }]

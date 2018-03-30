@@ -1,5 +1,10 @@
 import compiler from "./compiler";
-import { removeGeneratedFiles, readFileAsync, fileStatAsync } from "./helpers";
+import {
+  removeGeneratedFiles,
+  readFileAsync,
+  fileStatAsync,
+  existsAsync
+} from "./helpers";
 
 afterEach(removeGeneratedFiles);
 
@@ -111,10 +116,21 @@ it("should renew foo.md from foo.txt and bar.txt from foo.txt", async () => {
   expect(postStatBar.ctimeMs).toBeGreaterThan(preStatBar.ctimeMs);
 });
 
-// TODO
-// it('should not create a new file by default', async () => {
-//
-// });
-// it('should create a new file if option is set', async () => {
-//
-// });
+it("should not create a new file by default", async () => {
+  const sourceFileName = "./fixtures/foo.txt";
+  const targetFileName = "./fixtures/foo.null";
+  await compiler(sourceFileName, {
+    transmitRules: [{ test: /(\.txt$)/, targets: [".null"] }]
+  });
+  expect(await existsAsync(targetFileName)).toBe(false);
+});
+
+it("should create a new file if option is set", async () => {
+  const sourceFileName = "./fixtures/foo.txt";
+  const targetFileName = "./fixtures/foo.null";
+  await compiler(sourceFileName, {
+    transmitRules: [{ test: /(\.txt$)/, targets: [".null"] }],
+    noCreate: false
+  });
+  expect(await existsAsync(targetFileName)).toBe(true);
+});

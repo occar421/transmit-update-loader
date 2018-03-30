@@ -27,6 +27,15 @@ const enumerateFilesAsync = dirPath =>
     files.map(f => path.join(dirPath, f)).filter(f => fs.statSync(f).isFile())
   );
 
+/**
+ * @param {string} fileName
+ * @returns {Promise<boolean>}
+ */
+export const existsAsync = fileName =>
+  promisify(fs.access)(path.join(__dirname, fileName))
+    .then(() => true)
+    .catch(() => false);
+
 export const removeGeneratedFiles = async () => {
   const files = await enumerateFilesAsync(path.join(__dirname, "fixtures"));
   files.filter(f => f.endsWith(".null")).forEach(f => {

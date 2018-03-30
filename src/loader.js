@@ -63,6 +63,7 @@ export default function loader(source) {
 
   /** @type {string} */
   const sourcePath = this.resourcePath;
+  // flatMap
   const targetPaths = options.transmitRules.reduce(
     (acc, rule) =>
       acc.concat(
@@ -86,7 +87,7 @@ export default function loader(source) {
     targetPaths.map(targetPath =>
       touch(targetPath, {
         mtime: true,
-        nocreate: options.nocreate === true
+        nocreate: options.noCreate !== false
       })
     )
   ).then(() => {

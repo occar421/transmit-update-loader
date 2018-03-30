@@ -1,4 +1,5 @@
 import {getOptions} from 'loader-utils';
+import path from 'path';
 import touch from 'touch';
 import validateOptions from 'schema-utils';
 
@@ -54,12 +55,22 @@ export default function loader(source) {
     }
     //endregion Validation
 
+    /** @type {string} */
+    const sourcePath = this.resourcePath;
+    const targetPaths = options.transmitRules.reduce((acc, rule) => acc.concat(rule.targets
+      .map(target => sourcePath.replace(rule.test, target))
+      .filter(targetPath => path.normalize(sourcePath) !== path.normalize(targetPath))), []);
+
+    if (targetPaths.length === 0) {
+        return source;
+    }
+
     const callback = this.async();
 
-    touch(this.resourcePath, {
-        mtime: true,
-        nocreate: options.nocreate === true
-    }, () => {
+    Promise.all(targetPaths.map(targetPath => touch(targetPath, {
+      mtime: true,
+      nocreate: options.nocreate === true
+    }))).then(() => {
         callback(null, source);
     });
 }

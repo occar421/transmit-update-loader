@@ -25,7 +25,7 @@ it("should not renew itself by default", async () => {
     transmitRules: [{ test: /\/(.*$)/, targets: ["$1"] }]
   }); // identity mapping
   const postStat = await fileStatAsync(targetFileName);
-  expect(postStat.ctimeMs).toBe(preStat.ctimeMs);
+  expect(postStat.ctime.getTime()).toBe(preStat.ctime.getTime());
 });
 
 it("should not renew itself within multi targets", async () => {
@@ -36,7 +36,7 @@ it("should not renew itself within multi targets", async () => {
     transmitRules: [{ test: /\/(.*$)/, targets: ["$1", "$1", "foo", "bar"] }]
   });
   const postStat = await fileStatAsync(targetFileName);
-  expect(postStat.ctimeMs).toBe(preStat.ctimeMs);
+  expect(postStat.ctime.getTime()).toBe(preStat.ctime.getTime());
 });
 
 it("should not renew itself within multi rules", async () => {
@@ -50,7 +50,7 @@ it("should not renew itself within multi rules", async () => {
     ]
   });
   const postStat = await fileStatAsync(targetFileName);
-  expect(postStat.ctimeMs).toBe(preStat.ctimeMs);
+  expect(postStat.ctime.getTime()).toBe(preStat.ctime.getTime());
 });
 
 it("should renew foo.md from foo.txt", async () => {
@@ -61,7 +61,7 @@ it("should renew foo.md from foo.txt", async () => {
     transmitRules: [{ test: /(\.txt$)/, targets: [".md"] }]
   });
   const postStat = await fileStatAsync(targetFileName);
-  expect(postStat.ctimeMs).toBeGreaterThan(preStat.ctimeMs);
+  expect(postStat.ctime.getTime()).toBeGreaterThan(preStat.ctime.getTime());
 });
 
 it("should renew foo.md and foo.asciidoc from foo.txt", async () => {
@@ -75,8 +75,8 @@ it("should renew foo.md and foo.asciidoc from foo.txt", async () => {
   });
   const postStatMd = await fileStatAsync(targetMdFileName);
   const postStatAd = await fileStatAsync(targetAdFileName);
-  expect(postStatMd.ctimeMs).toBeGreaterThan(preStatMd.ctimeMs);
-  expect(postStatAd.ctimeMs).toBeGreaterThan(preStatAd.ctimeMs);
+  expect(postStatMd.ctime.getTime()).toBeGreaterThan(preStatMd.ctime.getTime());
+  expect(postStatAd.ctime.getTime()).toBeGreaterThan(preStatAd.ctime.getTime());
 });
 
 it("should renew foo.md and foo.asciidoc and foo.rst from foo.txt", async () => {
@@ -93,9 +93,11 @@ it("should renew foo.md and foo.asciidoc and foo.rst from foo.txt", async () => 
   const postStatMd = await fileStatAsync(targetMdFileName);
   const postStatAd = await fileStatAsync(targetAdFileName);
   const postStatRst = await fileStatAsync(targetRstFileName);
-  expect(postStatMd.ctimeMs).toBeGreaterThan(preStatMd.ctimeMs);
-  expect(postStatAd.ctimeMs).toBeGreaterThan(preStatAd.ctimeMs);
-  expect(postStatRst.ctimeMs).toBeGreaterThan(preStatRst.ctimeMs);
+  expect(postStatMd.ctime.getTime()).toBeGreaterThan(preStatMd.ctime.getTime());
+  expect(postStatAd.ctime.getTime()).toBeGreaterThan(preStatAd.ctime.getTime());
+  expect(postStatRst.ctime.getTime()).toBeGreaterThan(
+    preStatRst.ctime.getTime()
+  );
 });
 
 it("should renew foo.md from foo.txt and bar.txt from foo.txt", async () => {
@@ -112,8 +114,12 @@ it("should renew foo.md from foo.txt and bar.txt from foo.txt", async () => {
   });
   const postStatFoo = await fileStatAsync(targetFooFileName);
   const postStatBar = await fileStatAsync(targetBarFileName);
-  expect(postStatFoo.ctimeMs).toBeGreaterThan(preStatFoo.ctimeMs);
-  expect(postStatBar.ctimeMs).toBeGreaterThan(preStatBar.ctimeMs);
+  expect(postStatFoo.ctime.getTime()).toBeGreaterThan(
+    preStatFoo.ctime.getTime()
+  );
+  expect(postStatBar.ctime.getTime()).toBeGreaterThan(
+    preStatBar.ctime.getTime()
+  );
 });
 
 it("should not create a new file by default", async () => {

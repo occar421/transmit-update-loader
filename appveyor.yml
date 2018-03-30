@@ -1,0 +1,24 @@
+# Test against these versions of Node
+environment:
+  matrix:
+    - nodejs_version: "6"
+    - nodejs_version: "8"
+
+install:
+  # Get the latest stable version of Node
+  - ps: Install-Product node $env:nodejs_version x64
+  - npm install
+
+test_script:
+  # Output useful info for debugging.
+  - node --version
+  - npm --version
+  # run tests
+  - npm test
+
+branches:
+  only:
+  - master
+
+# Don't actually build.
+build: off

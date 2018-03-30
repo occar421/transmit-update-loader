@@ -1,40 +1,37 @@
-import fs from "fs";
+import * as fs from "fs-extra";
 import path from "path";
-import { promisify } from "util";
 
 /**
  * @param {string} fileName
  * @returns {Promise<string>}
  */
 export const readFileAsync = fileName =>
-  promisify(fs.readFile)(path.join(__dirname, fileName)).then(b =>
-    b.toString()
-  );
+  fs.readFile(path.join(__dirname, fileName)).then(b => b.toString());
 
 /**
  * @param {string} fileName
- * @returns {Promise<"fs".Stats>}
+ * @returns {Promise<{ctime:Date}>}
  */
 export const fileStatAsync = fileName =>
-  promisify(fs.stat)(path.join(__dirname, fileName));
+  fs.stat(path.join(__dirname, fileName));
 
 /**
  * @param {string} dirPath
  * @returns {Promise<array<string>>}
  */
 const enumerateFilesAsync = dirPath =>
-  promisify(fs.readdir)(dirPath).then(files =>
-    files.map(f => path.join(dirPath, f)).filter(f => fs.statSync(f).isFile())
-  );
+  fs
+    .readdir(dirPath)
+    .then(files =>
+      files.map(f => path.join(dirPath, f)).filter(f => fs.statSync(f).isFile())
+    );
 
 /**
  * @param {string} fileName
  * @returns {Promise<boolean>}
  */
 export const existsAsync = fileName =>
-  promisify(fs.access)(path.join(__dirname, fileName))
-    .then(() => true)
-    .catch(() => false);
+  fs.pathExists(path.join(__dirname, fileName));
 
 export const removeGeneratedFiles = async () => {
   const files = await enumerateFilesAsync(path.join(__dirname, "fixtures"));

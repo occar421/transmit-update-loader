@@ -1,8 +1,7 @@
 {
   "name": "transmit-update-loader",
   "version": "0.1.0",
-  "description":
-    "Message passing tool to transmit update to another file during webpack loader process.",
+  "description": "Message passing tool to transmit update to another file during webpack loader process.",
   "main": "src/loader.js",
   "repository": "https://github.com/occar421/transmit-update-loader",
   "author": "MasuqaT <occar@hotmail.co.jp>",
@@ -14,6 +13,7 @@
     "eslint": "^4.18.2",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-prettier": "^2.6.0",
+    "fs-extra": "^5.0.0",
     "jest": "^22.4.2",
     "memory-fs": "^0.4.1",
     "prettier": "^1.11.1",

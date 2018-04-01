@@ -17,14 +17,13 @@ export const fileStatAsync = fileName =>
 
 /**
  * @param {string} dirPath
- * @returns {Promise<array<string>>}
+ * @returns {array<string>}
  */
-const enumerateFilesAsync = dirPath =>
+const enumerateFiles = dirPath =>
   fs
-    .readdir(dirPath)
-    .then(files =>
-      files.map(f => path.join(dirPath, f)).filter(f => fs.statSync(f).isFile())
-    );
+    .readdirSync(dirPath)
+    .map(f => path.join(dirPath, f))
+    .filter(f => fs.statSync(f).isFile());
 
 /**
  * @param {string} fileName
@@ -33,8 +32,8 @@ const enumerateFilesAsync = dirPath =>
 export const existsAsync = fileName =>
   fs.pathExists(path.join(__dirname, fileName));
 
-export const removeGeneratedFiles = async () => {
-  const files = await enumerateFilesAsync(path.join(__dirname, "fixtures"));
+export const removeGeneratedFiles = () => {
+  const files = enumerateFiles(path.join(__dirname, "fixtures"));
   files.filter(f => f.endsWith(".null")).forEach(f => {
     fs.unlink(f, err => {
       if (err && err.code !== "ENOENT") throw err;

@@ -157,7 +157,7 @@ it("should not affect source file content", async () => {
   const sourceFileName = "./fixtures/foo.txt";
   const preSourceFileContent = await readFileAsync(sourceFileName);
   await compiler(sourceFileName, {
-    transmitRules: [{ test: /\/(.*$)/, targets: ["$1.null"] }],
+    transmitRules: [{ test: /(.*$)/, targets: ["$1.null"] }],
     noCreate: false
   });
   const postSourceFileContent = await readFileAsync(sourceFileName);

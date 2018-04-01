@@ -5,7 +5,29 @@
 
 Message passing tool to transmit update to another file during webpack loader process.
 
-# Options TODO
+# Use case
 
-* Throttle
-* [TBD] 
+Assume these file structure while using CSS Modules.
+
+```
++- src/
+    +- Button.tsx
+    +- Button.css
+    +- Button.css.d.ts
+```
+
+Here, also assume we use webpack Hot Module Replacement for dev server.   
+When 'Button.css' is updated, 'Button.css.d.ts' could be updated.  
+Although, 'Button.tsx' will not be notified that 'Button.css.d.ts' is updated.  
+If 'Button.css's selector has changed, 'Button.tsx' won't be decorated correctly.  
+
+Fortunately, it seems that webpack detects update with watching the same event when it is `touch`-ed.  
+This module helps that situation.
+
+'Button.css' -(generate)-> 'Button.css.d.ts' -(watch)-(`touch`)-> 'Button.tsx' recompile.
+
+# TODO
+
+* Options
+  * Throttle
+  * [TBD] 

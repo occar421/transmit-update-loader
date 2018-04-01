@@ -8,13 +8,14 @@ import {
 
 afterEach(removeGeneratedFiles);
 
-it("should not affect file content", async () => {
-  const targetFileName = "./fixtures/foo.txt";
-  const status = await compiler(targetFileName, {
+it("should not affect file content in webpack pipeline", async () => {
+  const sourceFileName = "./fixtures/foo.txt";
+  const sourceFileContent = await readFileAsync(sourceFileName);
+  const status = await compiler(sourceFileName, {
     transmitRules: [{ test: /\/(.*$)/, targets: ["$1.null"] }]
   });
   const output = status.toJson().modules[0].source;
-  expect(output).toBe(await readFileAsync(targetFileName));
+  expect(output).toBe(sourceFileContent);
 });
 
 it("should not renew itself by default", async () => {
@@ -139,4 +140,37 @@ it("should create a new file if option is set", async () => {
     noCreate: false
   });
   expect(await existsAsync(targetFileName)).toBe(true);
+});
+
+it("should renew txt.foo from foo.txt with complex rule", async () => {
+  const sourceFileName = "./fixtures/foo.txt";
+  const targetFileName = "./fixtures/txt.foo";
+  const preStat = await fileStatAsync(targetFileName);
+  await compiler(sourceFileName, {
+    transmitRules: [{ test: /(\w+)\.(txt$)/, targets: ["$2.$1"] }]
+  });
+  const postStatFoo = await fileStatAsync(targetFileName);
+  expect(postStatFoo.ctime.getTime()).toBeGreaterThan(preStat.ctime.getTime());
+});
+
+it("should not affect source file content", async () => {
+  const sourceFileName = "./fixtures/foo.txt";
+  const preSourceFileContent = await readFileAsync(sourceFileName);
+  await compiler(sourceFileName, {
+    transmitRules: [{ test: /\/(.*$)/, targets: ["$1.null"] }],
+    noCreate: false
+  });
+  const postSourceFileContent = await readFileAsync(sourceFileName);
+  expect(postSourceFileContent).toBe(preSourceFileContent);
+});
+
+it("should not affect target file content", async () => {
+  const sourceFileName = "./fixtures/foo.txt";
+  const targetFileName = "./fixtures/foo.md";
+  const preTargetFileContent = await readFileAsync(targetFileName);
+  await compiler(sourceFileName, {
+    transmitRules: [{ test: /(\.txt$)/, targets: [".md"] }]
+  });
+  const postTargetFileContent = await readFileAsync(targetFileName);
+  expect(postTargetFileContent).toBe(preTargetFileContent);
 });

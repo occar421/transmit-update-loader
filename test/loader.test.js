@@ -140,3 +140,14 @@ it("should create a new file if option is set", async () => {
   });
   expect(await existsAsync(targetFileName)).toBe(true);
 });
+
+it("should renew txt.foo from foo.txt with complex rule", async () => {
+  const sourceFileName = "./fixtures/foo.txt";
+  const targetFileName = "./fixtures/txt.foo";
+  const preStat = await fileStatAsync(targetFileName);
+  await compiler(sourceFileName, {
+    transmitRules: [{ test: /(\w+)\.(txt$)/, targets: ["$2.$1"] }]
+  });
+  const postStatFoo = await fileStatAsync(targetFileName);
+  expect(postStatFoo.ctime.getTime()).toBeGreaterThan(preStat.ctime.getTime());
+});

@@ -14,7 +14,7 @@ it("should not affect file content in webpack pipeline", async () => {
   const status = await compiler(sourceFileName, {
     transmitRules: [{ test: /\/(.*$)/, targets: ["$1.null"] }],
   });
-  const output = status.toJson().modules[0].source;
+  const output = status.toJson({ source: true }).modules[0].source;
   expect(output).toBe(sourceFileContent);
 });
 

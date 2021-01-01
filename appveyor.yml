@@ -16,9 +16,5 @@ test_script:
   # run tests
   - npm test
 
-branches:
-  only:
-  - master
-
 # Don't actually build.
 build: off

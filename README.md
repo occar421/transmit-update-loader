@@ -17,10 +17,10 @@ Assume this file structure while using CSS Modules.
     +- Button.css.d.ts
 ```
 
-Here, also assume we use Webpack Hot Module Replacement for dev server.   
+Here, also assume we use Webpack Hot Module Replacement for dev server.  
 When 'Button.css' is updated, 'Button.css.d.ts' could be updated.  
 Although, 'Button.tsx' will not be notified that 'Button.css.d.ts' is updated.  
-If 'Button.css' selector has changed, 'Button.tsx' won't be decorated correctly.  
+If 'Button.css' selector has changed, 'Button.tsx' won't be decorated correctly.
 
 Fortunately, it seems that webpack detects update with watching the same event when it is `touch`-ed.
 
@@ -28,6 +28,6 @@ Fortunately, it seems that webpack detects update with watching the same event w
 
 # TODO
 
-* Options
-  * Throttle
-  * [TBD] 
+- Options
+  - Throttle
+  - [TBD]

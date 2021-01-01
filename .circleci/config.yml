@@ -10,8 +10,8 @@ jobs:
 
       - restore_cache:
           keys:
-          - 12-dep-{{ checksum "package.json" }}
-          - 12-dep-
+            - 12-dep-{{ checksum "package.json" }}
+            - 12-dep-
 
       - run: yarn install
 
@@ -31,8 +31,8 @@ jobs:
 
       - restore_cache:
           keys:
-          - 14-dep-{{ checksum "package.json" }}
-          - 14-dep-
+            - 14-dep-{{ checksum "package.json" }}
+            - 14-dep-
 
       - run: yarn install
 

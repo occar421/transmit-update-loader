@@ -13,27 +13,27 @@ const schema = {
         type: "object",
         properties: {
           test: {
-            type: "object" // RegExp
+            type: "object", // RegExp
           },
           targets: {
             type: "array",
             minItems: 1,
             items: {
-              type: "string"
-            }
-          }
+              type: "string",
+            },
+          },
         },
-        required: ["test", "targets"]
-      }
+        required: ["test", "targets"],
+      },
     },
     noCreate: {
-      type: "boolean"
-    }
+      type: "boolean",
+    },
   },
-  required: ["transmitRules"]
+  required: ["transmitRules"],
 };
 
-const getObjectType = obj => {
+const getObjectType = (obj) => {
   const str = Object.prototype.toString.call(obj); // [object FooBar]
   return str.substring(8, str.length - 1);
 };
@@ -54,7 +54,7 @@ export default function loader(source) {
     "Options for transmit-update-loader are invalid."
   );
 
-  if (options.transmitRules.some(r => getObjectType(r.test) !== "RegExp")) {
+  if (options.transmitRules.some((r) => getObjectType(r.test) !== "RegExp")) {
     throw new Error(
       "`transmitRules.test` should be regex in transmit-update-loader."
     );
@@ -68,9 +68,9 @@ export default function loader(source) {
     (acc, rule) =>
       acc.concat(
         rule.targets
-          .map(target => sourcePath.replace(rule.test, target))
+          .map((target) => sourcePath.replace(rule.test, target))
           .filter(
-            targetPath =>
+            (targetPath) =>
               path.normalize(sourcePath) !== path.normalize(targetPath)
           )
       ),
@@ -84,10 +84,10 @@ export default function loader(source) {
   const callback = this.async();
 
   Promise.all(
-    targetPaths.map(targetPath =>
+    targetPaths.map((targetPath) =>
       touch(targetPath, {
         mtime: true,
-        nocreate: options.noCreate !== false
+        nocreate: options.noCreate !== false,
       })
     )
   ).then(() => {

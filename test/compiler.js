@@ -12,11 +12,11 @@ export default (fixture, options = {}) => {
           test: /.$/, // everything
           use: {
             loader: path.resolve(__dirname, "../src/loader.js"),
-            options: options
-          }
-        }
-      ]
-    }
+            options: options,
+          },
+        },
+      ],
+    },
   });
 
   compiler.outputFileSystem = new MemoryFs();

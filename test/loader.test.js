@@ -8,6 +8,16 @@ import {
 
 afterEach(removeGeneratedFiles);
 
+it("should not affect file content in webpack pipeline", async () => {
+  const sourceFileName = "./fixtures/foo.txt";
+  const sourceFileContent = await readFileAsync(sourceFileName);
+  const status = await compiler(sourceFileName, {
+    transmitRules: [{ test: /\/(.*$)/, targets: ["$1.null"] }],
+  });
+  const output = status.toJson().modules[0].source;
+  expect(output).toBe(sourceFileContent);
+});
+
 it("should not renew itself by default", async () => {
   // to prevent infinite renewing
   const targetFileName = "./fixtures/foo.txt";

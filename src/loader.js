@@ -1,7 +1,7 @@
 import { getOptions } from "loader-utils";
 import path from "path";
 import touch from "touch";
-import validateOptions from "schema-utils";
+import { validate } from "schema-utils";
 
 const schema = {
   type: "object",
@@ -38,7 +38,6 @@ const getObjectType = (obj) => {
   return str.substring(8, str.length - 1);
 };
 
-// noinspection JSUnusedGlobalSymbols
 /**
  * @this webpack.loader.LoaderContext
  * @param {string} source
@@ -47,34 +46,23 @@ const getObjectType = (obj) => {
 export default function loader(source) {
   const options = getOptions(this) || {};
 
-  //region Validation
-  validateOptions(
-    schema,
-    options,
-    "Options for transmit-update-loader are invalid."
-  );
+  validate(schema, options, "Options for transmit-update-loader are invalid.");
 
   if (options.transmitRules.some((r) => getObjectType(r.test) !== "RegExp")) {
     throw new Error(
       "`transmitRules.test` should be regex in transmit-update-loader."
     );
   }
-  //endregion Validation
 
   /** @type {string} */
   const sourcePath = this.resourcePath;
-  // flatMap
-  const targetPaths = options.transmitRules.reduce(
-    (acc, rule) =>
-      acc.concat(
-        rule.targets
-          .map((target) => sourcePath.replace(rule.test, target))
-          .filter(
-            (targetPath) =>
-              path.normalize(sourcePath) !== path.normalize(targetPath)
-          )
-      ),
-    []
+  const targetPaths = options.transmitRules.flatMap((rule) =>
+    rule.targets
+      .map((target) => sourcePath.replace(rule.test, target))
+      .filter(
+        (targetPath) =>
+          path.normalize(sourcePath) !== path.normalize(targetPath)
+      )
   );
 
   if (targetPaths.length === 0) {

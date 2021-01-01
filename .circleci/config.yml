@@ -1,7 +1,7 @@
 version: 2
 
 jobs:
-  build_6:
+  build_12:
     docker:
       - image: circleci/node:6
     working_directory: ~/node6
@@ -10,19 +10,19 @@ jobs:
 
       - restore_cache:
           keys:
-          - 6-dep-{{ checksum "package.json" }}
-          - 6-dep-
+          - 12-dep-{{ checksum "package.json" }}
+          - 12-dep-
 
       - run: yarn install
 
       - save_cache:
           paths:
             - node_modules
-          key: 6-dep-{{ checksum "package.json" }}
+          key: 12-dep-{{ checksum "package.json" }}
 
       - run: yarn test
 
-  build_8:
+  build_14:
     docker:
       - image: circleci/node:8
     working_directory: ~/node8
@@ -31,15 +31,15 @@ jobs:
 
       - restore_cache:
           keys:
-          - 8-dep-{{ checksum "package.json" }}
-          - 8-dep-
+          - 14-dep-{{ checksum "package.json" }}
+          - 14-dep-
 
       - run: yarn install
 
       - save_cache:
           paths:
             - node_modules
-          key: 8-dep-{{ checksum "package.json" }}
+          key: 14-dep-{{ checksum "package.json" }}
 
       - run: yarn test
 
@@ -59,13 +59,13 @@ workflows:
   version: 2
   build-deploy:
     jobs:
-      - build_6
-      - build_8
+      - build_12
+      - build_14
       - approve: # Wait for AppVeyor's result
           type: approval
           requires:
-            - build_6
-            - build_8
+            - build_12
+            - build_14
           filters:
             branches:
               only: master

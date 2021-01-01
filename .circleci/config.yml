@@ -3,8 +3,8 @@ version: 2
 jobs:
   build_12:
     docker:
-      - image: circleci/node:6
-    working_directory: ~/node6
+      - image: circleci/node:12
+    working_directory: ~/node12
     steps:
       - checkout
 
@@ -24,8 +24,8 @@ jobs:
 
   build_14:
     docker:
-      - image: circleci/node:8
-    working_directory: ~/node8
+      - image: circleci/node:14
+    working_directory: ~/node14
     steps:
       - checkout
 
@@ -45,7 +45,7 @@ jobs:
 
   deploy:
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:14
     working_directory: ~/deploy
     steps:
       - checkout

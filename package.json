@@ -7,7 +7,7 @@
   "author": "MasuqaT <occar@hotmail.co.jp>",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "7.16.10",
+    "@babel/core": "7.16.12",
     "@babel/preset-env": "7.16.11",
     "babel-jest": "27.4.6",
     "eslint": "8.7.0",
